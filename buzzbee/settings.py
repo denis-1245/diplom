@@ -27,8 +27,15 @@ def env_list(name, default=''):
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'change-me-only-for-local-development')
 DEBUG = env_bool('DJANGO_DEBUG', False)
 
-ALLOWED_HOSTS = env_list('DJANGO_ALLOWED_HOSTS', '127.0.0.1,localhost')
-CSRF_TRUSTED_ORIGINS = env_list('DJANGO_CSRF_TRUSTED_ORIGINS', '')
+ALLOWED_HOSTS = [
+    '127.0.0.1',
+    'localhost',
+    'diplom-t66b.onrender.com',
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://diplom-t66b.onrender.com',
+]
 
 # --- ПРИЛОЖЕНИЯ ---
 INSTALLED_APPS = [
