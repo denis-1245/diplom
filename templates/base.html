@@ -1,0 +1,617 @@
+{% load static %}
+{% load widget_tweaks %}
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>{% block title %}BuzzBee{% endblock %}</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+    {% block extra_css %}{% endblock %}
+
+    <style>
+        body {
+            background-color: #050505;
+            color: #fff;
+            font-family: 'Arial', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        /* Шапка */
+        .main-header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 0;
+            z-index: 1050;
+            transition: all 0.5s ease;
+        }
+
+        .main-header .navbar {
+            background-color: transparent !important;
+            transition: all 0.5s ease;
+        }
+        .main-header.scrolled .navbar {
+            background-color: rgba(17, 17, 17, 0.98) !important;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.7);
+        }
+        /* Конец стилей прозрачности */
+
+        .navbar-brand img {
+            height: 60px;
+            transition: height 0.3s;
+        }
+        .main-header.scrolled .navbar-brand img {
+            height: 45px;
+        }
+        .navbar-toggler {
+            border: none;
+            color: #ffc107;
+            padding: 0;
+        }
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 193, 7, 1%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        }
+        .header-nav .nav-link {
+            color: white;
+            font-weight: 600;
+            margin: 0 10px;
+            transition: color 0.3s;
+        }
+        .navbar-collapse .nav-item {
+            padding: 5px 0;
+        }
+        .navbar-collapse .nav-link:hover {
+            color: #ffc107;
+        }
+
+        .header-info-icon {
+            font-size: 2.2rem;
+        }
+        .header-info-text {
+            line-height: 1.1;
+        }
+        .header-info-text strong {
+            font-size: 1.2rem;
+            display: block;
+        }
+        .header-info-text small {
+            font-size: 0.9rem;
+        }
+        .phone-info .header-info-icon {
+            font-size: 2rem;
+        }
+        .phone-info .header-info-text small {
+            font-size: 0.8rem;
+        }
+
+        @media (max-width: 991.98px) {
+            .mobile-search-wrapper {
+                width: 100%;
+                margin-bottom: 5px;
+            }
+            .mobile-search-wrapper .search-form {
+            max-width: 100%;
+            }
+            .mobile-search-wrapper .search-icon {
+                /* Переносим стили абсолютного позиционирования */
+                right: 0;
+                top: 0;
+                position: absolute;
+                z-index: 10;
+            }
+            .navbar {
+                padding-top: 10px !important;
+                padding-bottom: 10px !important;
+            }
+            .phone-info .header-info-icon {
+                font-size: 1.5rem; /* Меньше иконка на мобильных */
+            }
+            .phone-info .header-info-text {
+                display: none; /* Скрываем текст, оставляем только иконку на узких экранах */
+            }
+            .navbar-collapse {
+                background-color: #111;
+                border-top: 1px solid #333;
+                padding: 15px;
+                border-radius: 0 0 8px 8px;
+                margin-top: 5px;
+            }
+            .header-nav {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .header-nav .nav-link {
+                margin: 5px 0;
+            }
+            .search-form {
+                max-width: 100%;
+                margin: 10px 0;
+            }
+            /* Скрываем info-текст у локации на мобильных */
+            .location-info .header-info-text {
+                display: none !important;
+            }
+        }
+
+        .btn-cta {
+            background-color: #ffc107;
+            color: #000;
+            font-weight: 700;
+            padding: 10px 30px;
+            border-radius: 10px;
+            transition: all 0.3s;
+            border: none;
+            text-transform: uppercase;
+        }
+        .btn-cta:hover {
+            background-color: #e0a800;
+            transform: scale(1.02);
+        }
+
+        /* Поиск */
+        .search-form .form-control {
+            background-color: rgba(68, 68, 68, 0.8);
+            border: 1px solid #555;
+            color: white;
+            border-radius: 10px;
+            padding-right: 40px;
+            height: 40px;
+        }
+        .search-form .search-icon {
+            position: absolute;
+            right: 0;
+            top: 0;
+            height: 40px;
+            width: 40px;
+            color: #ffc107;
+            border: none;
+            background: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .search-form {
+            position: relative;
+            max-width: 300px;
+        }
+
+        /* СТИЛИ МОДАЛЬНЫХ ОКОН */
+        .modal-content {
+            background-color: #222;
+            color: #fff;
+            border-radius: 15px;
+            border: 1px solid #444;
+        }
+        .modal-header {
+            border-bottom: 1px solid #333;
+        }
+        .modal-form-label {
+            font-size: 0.95rem;
+            font-weight: bold;
+            color: #ffc107;
+            display: block;
+            margin-bottom: 5px;
+        }
+        .modal-form-control {
+            background-color: #1a1a1a !important;
+            color: #f8f9fa !important;
+            border-radius: 8px !important;
+            border: 1px solid #444 !important;
+            padding: 10px 15px;
+        }
+        .modal-form-control::placeholder {
+            color: #aaa !important; /* Более светлый серый для плейсхолдера */
+            opacity: 1; /* Обеспечивает видимость в Firefox */
+        }
+        .modal-form-control::-webkit-input-placeholder {
+            color: #aaa !important;
+        }
+        .modal-form-control:-ms-input-placeholder {
+            color: #aaa !important;
+        }
+        .admin-link {
+            font-size: 0.9rem;
+            color: #dc3545;
+            text-decoration: none;
+            margin-top: 10px;
+            display: inline-block;
+        }
+
+        /* СТИЛИ СЕКЦИЙ */
+        .site-section {
+            padding: 100px 0;
+            overflow: hidden;
+            position: relative;
+        }
+        .site-section h2 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 50px;
+            text-align: center;
+            text-transform: uppercase;
+        }
+        .site-section p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #ccc;
+        }
+        .section-dark {
+            background-color: #111;
+        }
+        .section-light {
+            background-color: #1a1a1a;
+        }
+
+        /* Стили для услуг */
+        .service-list-header {
+            padding-top: 150px;
+            padding-bottom: 50px;
+            background-color: #111;
+        }
+        .service-card-item {
+            background-color: #1a1a1a;
+            border-radius: 10px;
+            border: 1px solid #333;
+            transition: all 0.3s;
+            overflow: hidden;
+            position: relative;
+            height: 100%;
+        }
+        .service-card-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(255, 193, 7, 0.2);
+            border-color: #ffc107;
+        }
+        .service-card-image-wrapper {
+            height: 200px;
+            overflow: hidden;
+            border-bottom: 1px solid #333;
+        }
+        .service-card-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        .service-card-item:hover .service-card-image {
+            transform: scale(1.05);
+        }
+        .service-card-body {
+            padding: 20px;
+        }
+        .service-card-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #ffc107;
+            margin-bottom: 10px;
+        }
+        .service-card-description {
+            font-size: 0.95rem;
+            color: #ccc;
+            height: 70px;
+            overflow: hidden;
+        }
+        .service-list-row {
+            background-color: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            padding: 15px;
+            transition: all 0.3s;
+        }
+        .service-list-row:hover {
+            border-color: #ffc107;
+            background-color: #222;
+        }
+        .list-image-wrapper {
+            width: 150px;
+            height: 100px;
+            overflow: hidden;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="main-header">
+        <nav class="navbar navbar-expand-lg py-3">
+            <div class="container-fluid px-4">
+
+                <a class="navbar-brand me-3 me-lg-5" href="{% url 'home' %}">
+                    <img src="{% static 'img/logo.png' %}" alt="Logo">
+                </a>
+
+                <div class="location-info d-none d-md-flex align-items-center">
+                    <i class="fa-solid fa-map-marker-alt text-warning me-2 header-info-icon"></i>
+                    <div class="text-white header-info-text d-none d-lg-block">
+                        <strong style="text-transform: uppercase;">ЕКАТЕРИНБУРГ</strong>
+                        <small>Волгоградская 112</small>
+                    </div>
+                </div>
+
+                <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+
+                    <nav class="header-nav d-lg-flex justify-content-center mx-lg-auto">
+                        <a href="{% url 'about' %}" class="nav-link text-uppercase fw-bold">О нас</a>
+                        <a href="{% url 'service_list' %}" class="nav-link text-uppercase fw-bold">Услуги</a>
+                        <a href="{% url 'works' %}" class="nav-link text-uppercase fw-bold">Работы</a>
+                        <a href="{% url 'contacts' %}" class="nav-link text-uppercase fw-bold">Контакты</a>
+                        <a href="{% url 'reviews' %}" class="nav-link text-uppercase fw-bold">Отзывы</a>
+                    </nav>
+
+                    <div class="d-lg-none mt-3">
+                        {% if user.is_authenticated %}
+                            <a href="{% url 'profile' %}" class="btn btn-cta w-100">ПРОФИЛЬ</a>
+                        {% else %}
+                            <button type="button" class="btn btn-cta w-100" data-bs-toggle="modal" data-bs-target="#loginModal">
+                                ВОЙТИ
+                            </button>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="d-flex align-items-center order-lg-last ms-auto">
+
+                    <div class="me-2 me-lg-4 mobile-search-wrapper">
+                        <form class="search-form d-flex align-items-center" action="{% url 'service_list' %}" method="get">
+                            <input type="search" name="q" class="form-control"
+                                    placeholder="Найти услугу" aria-label="Search"
+                                    value="{{ query|default:'' }}">
+
+                            <button type="submit" class="btn search-icon">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="d-flex align-items-center me-2 me-lg-4 phone-info">
+                        <a href="https://wa.me/79126222808" target="_blank" class="text-decoration-none d-none d-lg-block">
+                            <i class="fab fa-whatsapp text-white me-2 header-info-icon"></i>
+                        </a>
+                        <a href="tel:+79126222808" class="text-decoration-none d-lg-none">
+                            <i class="fas fa-phone-alt text-warning me-0 header-info-icon"></i>
+                        </a>
+
+                        <div class="text-white header-info-text d-none d-lg-block">
+                            <strong>+7 (912) 622 28 08</strong>
+                            <small>Пн-Сб с 10:00 - 20:00</small>
+                        </div>
+                    </div>
+
+                    <button class="navbar-toggler ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div class="d-none d-lg-block">
+                        {% if user.is_authenticated %}
+                            <a href="{% url 'profile' %}" class="btn btn-cta">ПРОФИЛЬ</a>
+                        {% else %}
+                            <button type="button" class="btn btn-cta" data-bs-toggle="modal" data-bs-target="#loginModal">
+                                ВОЙТИ
+                            </button>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 2000;">
+    {% for message in messages %}
+
+        {% with msg_type='info' msg_icon='fa-info-circle' msg_title='Информация' msg_delay='5000' %}
+
+            {% if 'success' in message.tags %}
+                {% with msg_type='success' msg_icon='fa-circle-check' msg_title='Успех!' %}{% endwith %}
+            {% elif 'error' in message.tags or 'danger' in message.tags %}
+                {% with msg_type='danger' msg_icon='fa-circle-xmark' msg_title='Ошибка!' msg_delay='8000' %}{% endwith %}
+            {% elif 'warning' in message.tags %}
+                {% with msg_type='warning' msg_icon='fa-exclamation-triangle' msg_title='Внимание' %}{% endwith %}
+            {% endif %}
+
+            <div class="toast bg-{{ msg_type }} text-white border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="{{ msg_delay }}">
+
+                <div class="toast-header bg-{{ msg_type }} text-white d-flex align-items-center">
+                    <strong class="me-auto text-white">
+                        <i class="fas {{ msg_icon }} me-2"></i>
+                        {{ msg_title }}
+                    </strong>
+                    {% if msg_type == 'warning' or msg_type == 'info' %}
+                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                    {% else %}
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+                    {% endif %}
+                </div>
+
+                <div class="toast-body">
+                    {{ message }}
+                </div>
+            </div>
+
+        {% endwith %}
+
+    {% endfor %}
+    </div>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer>
+        <div class="container text-center py-4" style="background-color: #050505;">
+            &copy; 2025 BuzzBee. Все права защищены. <a href="#" class="text-warning text-decoration-none ms-3">Политика конфиденциальности</a>
+        </div>
+    </footer>
+
+    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-white">Войти на сайт BuzzBee</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h4 class="text-warning mb-3">Авторизация</h4>
+                    <form method="post" action="{% url 'login' %}">
+                        {% csrf_token %}
+
+                        {% if login_form.non_field_errors %}
+                            <div class="alert alert-danger">{% for error in login_form.non_field_errors %}{{ error }}{% endfor %}</div>
+                        {% endif %}
+
+                        <div class="mb-3">
+                            <label class="modal-form-label">Логин или Телефон:</label>
+                            {{ login_form.username|add_class:"form-control modal-form-control" }}
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="modal-form-label">Пароль:</label>
+                            {{ login_form.password|add_class:"form-control modal-form-control" }}
+                        </div>
+
+                        <button type="submit" class="btn btn-cta w-100 mt-2">Войти</button>
+
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="rememberMe" name="remember_me">
+                                <label class="form-check-label" for="rememberMe" style="color: #ccc; font-size: 0.9rem;">Запомнить меня</label>
+                            </div>
+                            <a href="{% url 'password_reset' %}" class="text-warning text-decoration-none small">Забыли пароль?</a>
+                        </div>
+
+                        <hr class="text-secondary">
+                        <p class="text-center">
+                            <small>Нет аккаунта? <a href="#" class="text-warning text-decoration-none" data-bs-toggle="modal" data-bs-target="#registerModal" data-bs-dismiss="modal">Зарегистрироваться</a></small>
+                        </p>
+                        <p class="text-center">
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-white" id="registerModalLabel">Регистрация на сайте BuzzBee</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h4 class="text-warning mb-3">Создание нового аккаунта</h4>
+
+                    <form method="post" action="{% url 'register' %}">
+                        {% csrf_token %}
+
+                        <div class="mb-3">
+                            <label for="{{ register_form.username.id_for_label }}" class="form-label modal-form-label">{{ register_form.username.label }}:</label>
+                            {{ register_form.username|add_class:"form-control modal-form-control" }}
+                            {% for error in register_form.username.errors %}<div class="form-text text-danger">{{ error }}</div>{% endfor %}
+                            </div>
+
+                        <div class="mb-3">
+                            <label for="{{ register_form.email.id_for_label }}" class="form-label modal-form-label">{{ register_form.email.label }}:</label>
+                            {{ register_form.email|add_class:"form-control modal-form-control" }}
+                            {% for error in register_form.email.errors %}<div class="form-text text-danger">{{ error }}</div>{% endfor %}
+                            </div>
+
+                        <div class="mb-3">
+                            <label for="{{ register_form.phone_number.id_for_label }}" class="form-label modal-form-label">{{ register_form.phone_number.label }}:</label>
+                            {{ register_form.phone_number|add_class:"form-control modal-form-control" }}
+                            {% for error in register_form.phone_number.errors %}<div class="form-text text-danger">{{ error }}</div>{% endfor %}
+                            </div>
+
+                        <div class="mb-3">
+                            <label class="form-label modal-form-label">Пароль:</label>
+                            {{ register_form.password1|add_class:"form-control modal-form-control" }}
+                            {% for error in register_form.password1.errors %}
+                                <div class="form-text text-danger">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label modal-form-label">Повторите пароль:</label>
+                            {{ register_form.password2|add_class:"form-control modal-form-control" }}
+                            {% for error in register_form.password2.errors %}
+                                <div class="form-text text-danger">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <button type="submit" class="btn btn-cta w-100 mt-3">Зарегистрироваться</button>
+
+                        <hr class="text-secondary">
+                        <p class="text-center">
+                            <small>Уже есть аккаунт? <a href="#" class="text-warning text-decoration-none" data-bs-toggle="modal" data-bs-target="#loginModal" data-bs-dismiss="modal">Войти</a></small>
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="appointmentModal" tabindex="-1" aria-labelledby="appointmentModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-dark border-bottom-0">
+                    <h5 class="modal-title text-warning" id="appointmentModalLabel">Онлайн-запись</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body bg-dark">
+                    <div id="yclients-widget-container-modal" style="min-height: 700px;">
+                        <p class="text-white-50 text-center py-5">Загрузка формы записи...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 1200,
+        });
+
+        // Скрипт для эффекта "липкой" шапки
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('.main-header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // КОД ДЛЯ ОТКРЫТИЯ МОДАЛЬНЫХ ОКОН ПО ЯКОРЮ (для отображения ошибок авторизации/регистрации)
+            const hash = window.location.hash;
+            if (hash === '#loginModal' || hash === '#registerModal') {
+                const modalElement = document.querySelector(hash);
+                if (modalElement) {
+                    const modal = new bootstrap.Modal(modalElement);
+                    modal.show();
+                }
+            }
+
+            // КОД: ИНИЦИАЛИЗАЦИЯ И ПОКАЗ ТОСТОВ (Сообщения Django messages)
+            const toastElList = [].slice.call(document.querySelectorAll('.toast'))
+            const toastList = toastElList.map(function (toastEl) {
+                const toast = new bootstrap.Toast(toastEl)
+                toast.show()
+                return toast
+            })
+        });
+    </script>
+    <script type="text/javascript" src="https://w1059478.yclients.com/widgetJS" charset="UTF-8"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,35 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block content %}
+<div class="admin-welcome">
+    <h1>Панель управления BuzzBee</h1>
+    <p>Здесь можно добавлять услуги и товары, работы, отзывы и управлять пользователями сайта.</p>
+</div>
+
+<div class="admin-dashboard">
+{% if app_list %}
+    {% for app in app_list %}
+        {% for model in app.models %}
+            <section class="admin-card">
+                <div>
+                    <h2>{{ model.name }}</h2>
+                    <p>
+                        {% if model.object_name == 'Service' %}Добавление, редактирование и скрытие услуг или товаров.{% endif %}
+                        {% if model.object_name == 'Work' %}Управление выполненными работами и медиафайлами.{% endif %}
+                        {% if model.object_name == 'Review' %}Проверка и публикация отзывов клиентов.{% endif %}
+                        {% if model.object_name == 'CustomUser' %}Управление администраторами и пользователями.{% endif %}
+                    </p>
+                </div>
+                <div class="admin-card-actions">
+                    {% if model.add_url %}<a class="button" href="{{ model.add_url }}">Добавить</a>{% endif %}
+                    {% if model.admin_url %}<a class="button secondary" href="{{ model.admin_url }}">Открыть список</a>{% endif %}
+                </div>
+            </section>
+        {% endfor %}
+    {% endfor %}
+{% else %}
+    <p>Нет доступных разделов.</p>
+{% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ service.name }} - BuzzBee{% endblock %}
+
+{% block content %}
+
+<section class="site-section section-dark" style="padding-top: 150px;">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 mb-4">
+                <h1 class="text-warning fw-bold">{{ service.name }}</h1>
+                <p class="text-white-50 fs-5 mb-4">Категория: <span class="badge bg-warning text-dark">{{ service.category }}</span></p>
+            </div>
+        </div>
+
+        <div class="row align-items-start">
+            <div class="col-lg-6 mb-4">
+                {% if service.image %}
+                    <img src="{{ service.image.url }}" alt="{{ service.name }}" class="img-fluid rounded shadow-lg border border-secondary">
+                {% else %}
+                    <img src="{% static 'img/placeholder_detail.jpg' %}" alt="Изображение отсутствует" class="img-fluid rounded shadow-lg border border-secondary">
+                {% endif %}
+            </div>
+
+            <div class="col-lg-6 mb-4">
+                <h2 class="text-white mb-3">Полное описание</h2>
+                <div class="text-white lead mb-4">{{ service.description|linebreaks }}</div>
+
+                <hr class="border-secondary">
+
+                <h3 class="text-warning mb-3">
+                    Цена от: {{ service.price|floatformat:"0" }} ₽
+                </h3>
+
+                <p class="text-white-50 small">Точная цена зависит от марки/модели и комплектации вашего автомобиля.</p>
+
+                <a id="yclients_btn" href="https://w1059478.yclients.com" class="btn btn-cta btn-lg mt-3 w-100"> ЗАПИСАТЬСЯ НА УСЛУГУ </a>
+            </div>
+        </div>
+
+        <div class="mt-5 text-center">
+             <a href="{% url 'service_list' %}" class="btn btn-outline-warning">← Вернуться к списку услуг</a>
+        </div>
+
+    </div>
+</section>
+
+{% endblock content %}

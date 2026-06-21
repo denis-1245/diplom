@@ -1,0 +1,230 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}О нас - BuzzBee{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* ========================================================= */
+    /* СТИЛИ КОНКРЕТНО ДЛЯ СТРАНИЦЫ "О НАС" */
+    /* ========================================================= */
+
+    /* Герой-секция на странице О нас (с отступом от шапки) */
+    .about-hero {
+        padding-top: 150px;
+        padding-bottom: 50px;
+        background-color: #111;
+        border-bottom: 3px solid #ffc107;
+    }
+
+    .about-hero h1 {
+        font-size: 3.5rem;
+        font-weight: 900;
+        text-transform: uppercase;
+    }
+
+    /* Секция Ценности */
+    .value-card {
+        background-color: #1a1a1a;
+        padding: 30px;
+        border-radius: 10px;
+        border-left: 5px solid #ffc107;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        height: 100%;
+    }
+    .value-card i {
+        font-size: 3rem;
+        margin-bottom: 15px;
+    }
+
+    /* ========================================================= */
+    /* СТИЛИ ДЛЯ ВИДЕО */
+    /* ========================================================= */
+    .video-container {
+        position: relative;
+        padding-bottom: 177.78%;
+        height: 0;
+    }
+
+    .studio-video {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        display: block;
+        border-radius: 8px;
+        background-color: #000;
+    }
+
+    .video-caption {
+        background-color: rgba(0, 0, 0, 0.7);
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        z-index: 5;
+        pointer-events: none;
+    }
+
+    .philosophy-image {
+        max-height: 750px;
+        width: 100%;
+        object-fit: cover;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<section class="site-section about-hero">
+    <div class="container" data-aos="fade-down">
+        <h1 class="text-warning text-center">BuzzBee: Детейлинг, в котором живет страсть</h1>
+        <p class="text-center lead text-secondary mx-auto" style="max-width: 800px;">
+            Мы — больше, чем детейлинг-студия. Мы — команда перфекционистов из Екатеринбурга, чья миссия — не просто уход,
+            а сохранение и преумножение ценности вашего автомобиля. С 2015 года мы превращаем обычные машины в шедевры,
+            обеспечивая им безупречный блеск и долговечную защиту.
+        </p>
+    </div>
+</section>
+
+<section class="site-section section-dark">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4 mb-lg-0" data-aos="fade-right">
+                <h2 class="text-white text-start">Наша Философия — Экспертность в Автоэлектронике</h2>
+                <p>
+                    Наш опыт в детейлинге дополняется глубокой специализацией на установке сложного электронного оборудования.
+                    Мы верим, что современные технологии должны быть идеально интегрированы в автомобиль, не нарушая его заводскую эстетику и функционал.
+                </p>
+                <p class="fs-5 fw-bold text-warning">
+                    «Мы не просто устанавливаем, мы интегрируем. Вы получаете современный функционал без нарушения штатной проводки».
+                </p>
+                <p>
+                    Мы работаем с лучшими производителями Android-магнитол и Bi-LED систем, используя метод "Pin-to-Pin" подключения.
+                    Каждая установка, от StarLine до мультимедиа, проводится по строгому регламенту, что гарантирует сохранение заводской гарантии и безопасность.
+                </p>
+            </div>
+            <div class="col-lg-6" data-aos="fade-left">
+                <img src="{% static 'img/Toyota.png' %}"
+                     alt="Мастер устанавливает Android-магнитолу"
+                     class="img-fluid rounded shadow-lg border border-secondary philosophy-image">
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="site-section section-light">
+    <div class="container">
+        <h2 class="text-warning">Наши Ключевые Ценности</h2>
+        <div class="row">
+            <div class="col-md-4 mb-4" data-aos="zoom-in" data-aos-delay="100">
+                <div class="value-card">
+                    <i class="fas fa-handshake text-warning"></i>
+                    <h4 class="text-white fw-bold">1. Прозрачность и Доверие</h4>
+                    <p class="text-secondary">Предоставляем видео- и фотоотчеты на каждом этапе работы. Никаких скрытых платежей — только точный расчет и честные цены.</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4" data-aos="zoom-in" data-aos-delay="200">
+                <div class="value-card">
+                    <i class="fas fa-graduation-cap text-warning"></i>
+                    <h4 class="text-white fw-bold">2. Экспертность Команды</h4>
+                    <p class="text-secondary">Наша команда — сертифицированные мастера с опытом от 5 до 10 лет. Мы регулярно повышаем квалификацию и владеем всеми новинками индустрии.</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4" data-aos="zoom-in" data-aos-delay="300">
+                <div class="value-card">
+                    <i class="fas fa-chart-line text-warning"></i>
+                    <h4 class="text-white fw-bold">3. Долгосрочный Результат</h4>
+                    <p class="text-secondary">Мы используем материалы, обеспечивающие не просто "красоту на день", а защиту и сохранение идеального вида вашего авто на долгие годы.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="site-section section-dark">
+    <div class="container">
+        <h2 class="text-white" data-aos="fade-up">Наша Студия в Екатеринбурге и Процесс Работы</h2>
+        <p class="text-center mb-5 text-secondary" data-aos="fade-down">
+            Посмотрите, как мы работаем: профессионализм, организация и внимание к деталям.
+        </p>
+
+        <div class="row">
+
+            <div class="col-md-6 col-lg-4 mb-4" data-aos="zoom-in-up">
+                <div class="video-container rounded-3 overflow-hidden shadow-lg border border-secondary">
+                    <video class="studio-video" controls autoplay muted loop playsinline>
+                        <source src="{% static 'video/IMG_0306.mp4' %}" type="video/mp4">
+                        Ваш браузер не поддерживает видео.
+                    </video>
+                    <div class="video-caption text-white p-3">
+                        <h5 class="text-warning fw-bold">Организация рабочего пространства</h5>
+                        <p class="small text-secondary m-0">Порядок — основа идеального результата.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4 mb-4" data-aos="zoom-in-up" data-aos-delay="150">
+                <div class="video-container rounded-3 overflow-hidden shadow-lg border border-secondary">
+                    <video class="studio-video" controls autoplay muted loop playsinline>
+                        <source src="{% static 'video/IMG_3996.mp4' %}" type="video/mp4">
+                        Ваш браузер не поддерживает видео.
+                    </video>
+                    <div class="video-caption text-white p-3">
+                        <h5 class="text-warning fw-bold">Точная работа с деталями</h5>
+                        <p class="small text-secondary m-0">Аккуратность в каждой операции.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4 mb-4" data-aos="zoom-in-up" data-aos-delay="300">
+                <div class="video-container rounded-3 overflow-hidden shadow-lg border border-secondary">
+                    <video class="studio-video" controls autoplay muted loop playsinline>
+                        <source src="{% static 'video/IMG_3078.mp4' %}" type="video/mp4">
+                        Ваш браузер не поддерживает видео.
+                    </video>
+                    <div class="video-caption text-white p-3">
+                        <h5 class="text-warning fw-bold">Экспертиза в автоэлектронике</h5>
+                        <p class="small text-secondary m-0">Современные решения для вашего авто.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="text-center mt-5">
+            <h3 class="text-white fw-bold mb-3">Команда BuzzBee: Страсть к автомобилям объединяет</h3>
+            <p class="text-secondary">Профессионализм начинается с сильной, дружной команды. Мы работаем с удовольствием.</p>
+            <div class="row justify-content-center mt-4">
+                <div class="col-lg-8">
+                    <div class="video-container rounded-3 overflow-hidden shadow-lg border border-warning">
+                        <video class="studio-video" controls autoplay muted playsinline>
+                            <source src="{% static 'video/IMG_3289.mp4' %}" type="video/mp4">
+                            Ваш браузер не поддерживает видео.
+                        </video>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<section class="site-section section-light py-5">
+    <div class="container text-center">
+        <h2 class="text-white mb-4 fw-bold" data-aos="zoom-in">Готовы доверить нам свой автомобиль?</h2>
+        <p class="text-warning fs-5 mb-5" data-aos="zoom-in" data-aos-delay="100">
+            Начните с бесплатной диагностики и консультации. Мы составим персональный план ухода.
+        </p>
+        <a id="yclients_btn"
+           href="https://w1059478.yclients.com"
+           class="btn btn-cta btn-lg btn-cta-xl"
+           data-aos="fade-up"
+           data-aos-delay="200">
+            Записаться на консультацию
+        </a>
+    </div>
+</section>
+
+{% endblock content %}

@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Детали Работы: {{ work.title }}{% endblock %}
+
+{% block content %}
+
+<section class="site-section pt-5">
+    <div class="container" style="padding-top: 150px;">
+        <h1 class="text-warning">{{ work.title }}</h1>
+        <p class="lead text-secondary">{{ work.description }}</p>
+
+        <hr class="my-4 text-secondary">
+
+        <h2>Галерея</h2>
+        <div class="row">
+            {% with main_video=work.get_main_video_url main_image=work.get_main_image_url %}
+                {% if main_video %}
+                    <div class="col-12 mb-4">
+                        <video controls class="w-100 rounded" style="max-height: 500px; object-fit: cover;">
+                            <source src="{{ main_video }}" type="video/mp4">
+                            Ваш браузер не поддерживает видео.
+                        </video>
+                    </div>
+                {% elif main_image %}
+                    <div class="col-12 mb-4">
+                        <img src="{{ main_image }}" alt="{{ work.title }}" class="img-fluid rounded">
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            {% for media in work.media.all %}
+                <div class="col-md-6 col-lg-4 mb-4">
+                    {% if media.is_image %}
+                        <img src="{{ media.file.url }}" alt="Дополнительное фото" class="img-fluid rounded shadow-sm">
+                    {% else %}
+                        <video controls class="w-100 rounded shadow-sm" style="max-height: 300px; object-fit: cover;">
+                            <source src="{{ media.file.url }}" type="video/mp4">
+                            Ваш браузер не поддерживает видео.
+                        </video>
+                    {% endif %}
+                </div>
+            {% empty %}
+                <p class="text-secondary">Нет дополнительных медиафайлов.</p>
+            {% endfor %}
+        </div>
+
+        <a href="{% url 'works' %}" class="btn btn-warning mt-4"><i class="fas fa-arrow-left me-2"></i> Назад к работам</a>
+    </div>
+</section>
+
+{% endblock content %}

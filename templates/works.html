@@ -1,0 +1,324 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Наши Работы - BuzzBee{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* ========================================================= */
+    /* СТИЛИ ГАЛЕРЕИ РАБОТ */
+    /* ========================================================= */
+    .works-hero {
+        padding-top: 150px;
+        padding-bottom: 50px;
+        background-color: #111;
+        border-bottom: 3px solid #ffc107;
+    }
+    .works-hero h1 {
+        font-size: 3.5rem;
+        font-weight: 900;
+        text-transform: uppercase;
+    }
+
+    /* 🎨 СТИЛИ КНОПОК ПЕРЕКЛЮЧЕНИЯ ВИДА (скопировано из service_list) */
+    .view-switch-btn {
+        margin-right: 5px;
+        transition: all 0.3s;
+        border-radius: 8px;
+        font-weight: 500;
+        padding: 8px 15px;
+        font-size: 16px;
+        cursor: pointer;
+        /* Неактивное состояние */
+        background-color: #000;
+        color: #ffc107;
+        border: 1px solid #ffc107;
+    }
+    .view-switch-btn:hover {
+        background-color: #1a1a1a;
+        color: #fff;
+    }
+    .view-switch-btn.active {
+        /* Активное состояние */
+        background-color: #ffc107;
+        color: #000 !important;
+        font-weight: 700;
+        border-color: #ffc107;
+    }
+    .view-switch-btn.active:hover {
+        background-color: #e0a800;
+    }
+    /* Стили для контейнера кнопок и отступа */
+    .work-list-header {
+        padding-top: 150px;
+        padding-bottom: 30px;
+    }
+    /* Конец стилей кнопок */
+
+    /* Карточка работы (Сетка) */
+    .work-item {
+        position: relative;
+        overflow: hidden;
+        border-radius: 10px;
+        background-color: #1a1a1a;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        cursor: pointer; /* Для визуального обозначения кликабельности */
+        text-decoration: none; /* Убираем подчеркивание */
+    }
+    .work-item:hover {
+        text-decoration: none;
+    }
+    .work-video-container {
+        width: 100%;
+        height: 300px;
+        overflow: hidden;
+        position: relative;
+    }
+    .work-video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    .work-item:hover .work-video {
+        transform: scale(1.05);
+        transition: transform 0.5s ease;
+    }
+
+    /* Общая информация о работе */
+    .work-body {
+        padding: 20px;
+        flex-grow: 1;
+    }
+    .work-body h4 {
+        color: #ffc107;
+        font-weight: 700;
+        margin-top: 0;
+    }
+    .work-body p {
+        color: #ccc;
+    }
+
+    /* Мета-информация */
+    .work-meta {
+        background-color: #111;
+        padding: 15px;
+        border-top: 1px solid #333;
+        margin-top: auto;
+    }
+    .work-meta .badge {
+        font-size: 0.8rem;
+        font-weight: 600;
+        margin-right: 5px;
+        margin-bottom: 5px;
+        display: inline-block;
+    }
+
+    /* Стили для вида СПИСОК */
+    .work-list-row {
+        background-color: #1a1a1a;
+        border-radius: 10px;
+        padding: 15px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        cursor: pointer;
+        transition: background-color 0.3s;
+        text-decoration: none;
+        color: inherit;
+    }
+    .work-list-row:hover {
+        background-color: #2a2a2a;
+        text-decoration: none;
+    }
+    .list-image-wrapper {
+        width: 150px;
+        height: 100px;
+        overflow: hidden;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .list-image-wrapper .work-video {
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<section class="site-section works-hero work-list-header">
+    <div class="container" data-aos="fade-down">
+        <div class="d-flex justify-content-between align-items-center">
+
+            <div class="d-flex align-items-center">
+                <div class="btn-group" role="group" aria-label="View Switch">
+                    <button type="button" class="btn view-switch-btn active" id="grid-view-btn">
+                        <i class="fas fa-th-large me-1"></i> Сетка
+                    </button>
+                    <button type="button" class="btn view-switch-btn" id="list-view-btn">
+                        <i class="fas fa-list me-1"></i> Список
+                    </button>
+                </div>
+            </div>
+
+            <h1 class="text-warning d-none d-md-block">Наши Работы</h1>
+        </div>
+        <p class="text-center lead text-secondary mx-auto mt-3 d-md-none" style="max-width: 800px;">
+            Посмотрите на примеры нашей работы. Мы гарантируем безупречный результат.
+        </p>
+    </div>
+</section>
+
+<section class="site-section section-light pt-0">
+    <div class="container">
+
+        <div id="work-container" class="row">
+
+            {% if works %}
+                {% for work in works %}
+
+                    <div class="col-md-6 col-lg-4 mb-4 work-entry grid-view"
+                         data-aos="zoom-in"
+                         data-aos-delay="{{ forloop.counter0|stringformat:'d' }}00">
+
+                        <a href="{% url 'work_detail' slug=work.slug %}" class="work-item">
+                            <div class="work-video-container">
+
+                                {% with main_video=work.get_main_video_url main_image=work.get_main_image_url %}
+                                    {% if main_video %}
+                                        <video class="work-video" autoplay muted loop playsinline>
+                                            <source src="{{ main_video }}" type="video/mp4">
+                                            Ваш браузер не поддерживает видео.
+                                        </video>
+                                    {% elif main_image %}
+                                        <img src="{{ main_image }}" alt="{{ work.title }}" class="work-video">
+                                    {% else %}
+                                        <div class="bg-dark d-flex align-items-center justify-content-center h-100 w-100"><p class="text-secondary m-0">Нет фото/видео</p></div>
+                                    {% endif %}
+                                {% endwith %}
+
+                            </div>
+
+                            <div class="work-body">
+                                <h4>{{ work.title }}</h4>
+                                <p>{{ work.description|truncatechars:150 }}</p>
+                            </div>
+
+                            <div class="work-meta">
+                                {% for tag in work.get_tags %}
+                                    <span class="badge bg-warning text-dark">{{ tag }}</span>
+                                {% endfor %}
+
+                                <p class="text-white-50 small mt-2 mb-0">
+                                    Срок: {{ work.duration }} | Стоимость: {{ work.price }}
+                                </p>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="col-12 mb-3 work-entry list-view d-none"
+                         data-aos="fade-up"
+                         data-aos-delay="{{ forloop.counter0|stringformat:'d' }}00">
+
+                        <a href="{% url 'work_detail' slug=work.slug %}" class="work-list-row d-flex align-items-center">
+
+                            <div class="list-image-wrapper me-4 d-none d-sm-block">
+
+                                {% with main_video=work.get_main_video_url main_image=work.get_main_image_url %}
+                                    {% if main_video %}
+                                        <video class="work-video" autoplay muted loop playsinline>
+                                            <source src="{{ main_video }}" type="video/mp4">
+                                            Ваш браузер не поддерживает видео.
+                                        </video>
+                                    {% elif main_image %}
+                                        <img src="{{ main_image }}" alt="{{ work.title }}" class="work-video">
+                                    {% else %}
+                                        <div class="bg-dark d-flex align-items-center justify-content-center h-100 w-100"><p class="text-secondary small m-0">Нет медиа</p></div>
+                                    {% endif %}
+                                {% endwith %}
+
+                            </div>
+
+                            <div class="flex-grow-1">
+                                <h4>{{ work.title }}</h4>
+                                <p class="text-white-50 m-0 d-none d-md-block">{{ work.description|truncatechars:100 }}</p>
+
+                                <div class="mt-2">
+                                    {% for tag in work.get_tags %}
+                                        <span class="badge bg-warning text-dark">{{ tag }}</span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                            <div class="text-end ms-auto">
+                                <p class="text-warning m-0 h5">{{ work.price }}</p>
+                                <p class="text-white-50 small m-0">({{ work.duration }})</p>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="col-12 text-center py-5">
+                    <h3 class="text-warning">Галерея пока пуста</h3>
+                    <p class="text-secondary">Добавьте ваши первые работы через административную панель.</p>
+                </div>
+            {% endif %}
+
+        </div>
+    </div>
+</section>
+
+{% endblock content %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const container = document.getElementById('work-container');
+        const gridBtn = document.getElementById('grid-view-btn');
+        const listBtn = document.getElementById('list-view-btn');
+
+        // Переименовываем, чтобы соответствовать классу work-entry
+        const workItemsGrid = document.querySelectorAll('.work-entry.grid-view');
+        const workItemsList = document.querySelectorAll('.work-entry.list-view');
+
+        let currentView = 'grid'; // Начинаем с Сетки
+
+        function switchView(viewType) {
+            currentView = viewType;
+            if (viewType === 'list') {
+                container.classList.remove('row');
+
+                // Стиль кнопок: Список АКТИВЕН
+                gridBtn.classList.remove('active');
+                listBtn.classList.add('active');
+
+                // Переключение отображения элементов
+                workItemsGrid.forEach(item => item.classList.add('d-none'));
+                workItemsList.forEach(item => item.classList.remove('d-none'));
+
+            } else { // Grid view (Сетка)
+                container.classList.add('row');
+
+                // Стиль кнопок: Сетка АКТИВНА
+                gridBtn.classList.add('active');
+                listBtn.classList.remove('active');
+
+                // Переключение отображения элементов
+                workItemsGrid.forEach(item => item.classList.remove('d-none'));
+                workItemsList.forEach(item => item.classList.add('d-none'));
+            }
+        }
+
+        // Обработчики событий
+        gridBtn.addEventListener('click', () => switchView('grid'));
+        listBtn.addEventListener('click', () => switchView('list'));
+
+        // Устанавливаем вид по умолчанию (Сетка)
+        switchView('grid');
+    });
+</script>
+{% endblock %}

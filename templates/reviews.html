@@ -1,0 +1,202 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}Отзывы о BuzzBee{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* ========================================================= */
+    /* СТИЛИ СЕКЦИИ ОТЗЫВОВ */
+    /* ========================================================= */
+    .reviews-hero {
+        padding-top: 150px;
+        padding-bottom: 50px;
+        background-color: #111;
+        border-bottom: 3px solid #ffc107;
+    }
+    .reviews-hero h1 {
+        font-size: 3.5rem;
+        font-weight: 900;
+        text-transform: uppercase;
+    }
+
+    /* Карточка отзыва в списке */
+    .review-list-card {
+        background-color: #1a1a1a;
+        padding: 30px;
+        border-radius: 10px;
+        border-left: 5px solid #ffc107;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+    .review-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+        border-bottom: 1px dashed #333;
+        padding-bottom: 15px;
+    }
+    .review-avatar {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background-color: #333;
+        margin-right: 15px;
+        object-fit: cover;
+    }
+    .review-author h5 {
+        color: #fff;
+        font-weight: 700;
+        margin-bottom: 0;
+    }
+    .review-stars {
+        color: #ffc107;
+        font-size: 1.2rem;
+    }
+    .review-body p {
+        color: #ccc;
+        font-style: italic;
+        flex-grow: 1;
+    }
+    .review-meta {
+        margin-top: auto;
+        padding-top: 10px;
+        color: #888;
+        font-size: 0.85rem;
+    }
+
+    /* Стили для формы отзыва */
+    .review-card.bg-dark .form-control {
+        background-color: #333 !important;
+        border: none !important;
+        color: #fff !important;
+    }
+    .review-card.bg-dark .form-label {
+        font-weight: bold;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<section class="site-section reviews-hero">
+    <div class="container" data-aos="fade-down">
+        <h1 class="text-warning text-center">Отзывы о Нашей Работе</h1>
+        <p class="text-center lead text-secondary mx-auto" style="max-width: 800px;">
+            Лучшее доказательство нашего профессионализма — слова наших клиентов.
+        </p>
+    </div>
+</section>
+
+<section class="site-section section-dark pt-0">
+    <div class="container">
+
+        <div class="text-center mt-5">
+            <h3 class="text-warning">Поделитесь вашим мнением о нашей работе!</h3>
+
+            {% if user.is_authenticated %}
+
+                {% if user_has_reviewed %}
+                    <p class="lead text-white mt-4">Вы уже оставляли отзыв. Спасибо за ваше мнение!</p>
+                {% else %}
+                    <div class="row justify-content-center mt-4" data-aos="fade-up">
+                        <div class="col-lg-8">
+                            <div class="review-card bg-dark border-0 p-4">
+                                <h4 class="text-white mb-4 text-center">Ваш отзыв, {{ user.username }}</h4>
+
+                                <form method="POST" action="{% url 'reviews' %}">
+                                    {% csrf_token %}
+
+                                    {% if review_form.non_field_errors %}
+                                        <div class="alert alert-danger text-start">
+                                            {% for error in review_form.non_field_errors %}{{ error }}{% endfor %}
+                                        </div>
+                                    {% endif %}
+
+                                    <div class="mb-3 text-start">
+                                        <label for="{{ review_form.rating.id_for_label }}" class="form-label text-warning">{{ review_form.rating.label }}</label>
+                                        {{ review_form.rating|add_class:"form-control" }}
+                                        {% for error in review_form.rating.errors %}<div class="form-text text-danger">{{ error }}</div>{% endfor %}
+                                    </div>
+
+                                    <div class="mb-3 text-start">
+                                        <label for="{{ review_form.car_model.id_for_label }}" class="form-label text-warning">{{ review_form.car_model.label }}</label>
+                                        {{ review_form.car_model|add_class:"form-control"|attr:"placeholder:Например, BMW M5 F90" }}
+                                        {% for error in review_form.car_model.errors %}<div class="form-text text-danger">{{ error }}</div>{% endfor %}
+                                    </div>
+
+                                    <div class="mb-3 text-start">
+                                        <label for="{{ review_form.service.id_for_label }}" class="form-label text-warning">{{ review_form.service.label }}</label>
+                                        {{ review_form.service|add_class:"form-control"|attr:"placeholder:Например, Установка Bi-LED и StarLine" }}
+                                        {% for error in review_form.service.errors %}<div class="form-text text-danger">{{ error }}</div>{% endfor %}
+                                    </div>
+
+                                    <div class="mb-3 text-start">
+                                        <label for="{{ review_form.text.id_for_label }}" class="form-label text-warning">{{ review_form.text.label }}</label>
+                                        {{ review_form.text|add_class:"form-control"|attr:"rows:5"|attr:"placeholder:Пожалуйста, поделитесь вашими впечатлениями о нашей работе." }}
+                                        {% for error in review_form.text.errors %}<div class="form-text text-danger">{{ error }}</div>{% endfor %}
+                                    </div>
+
+                                    <button type="submit" class="btn btn-cta w-100 mt-3">ОПУБЛИКОВАТЬ ОТЗЫВ</button>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+
+            {% else %}
+                <p class="lead text-white mt-4">
+                    Чтобы оставить отзыв, пожалуйста, <a href="{% url 'login' %}" class="text-warning">авторизуйтесь</a>.
+                </p>
+            {% endif %}
+
+        </div>
+
+        <hr class="mt-5 border-secondary">
+
+        <h3 class="text-warning mt-5 text-center" data-aos="fade-up">Все опубликованные отзывы</h3>
+
+        <div class="row mt-4">
+            {% if reviews %}
+                {% for review in reviews %}
+                    <div class="col-lg-4 mb-4" data-aos="fade-up">
+                        <div class="review-list-card">
+                            <div class="review-header">
+                                <div class="review-avatar"></div>
+                                <div class="review-author">
+                                    <h5>{{ review.user.username }}</h5>
+                                    <div class="review-stars">
+                                        {% for i in "12345"|make_list %}
+                                            {% if forloop.counter <= review.rating %}
+                                                <i class="fas fa-star"></i>
+                                            {% else %}
+                                                <i class="far fa-star text-secondary"></i>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="review-body">
+                                <p>{{ review.text }}</p>
+                            </div>
+                            <div class="review-meta">
+                                Автомобиль: {{ review.car_model }} | Услуга: {{ review.service }} <br>
+                                <small>Опубликовано: {{ review.created_at|date:"d M Y" }}</small>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="col-12 text-center py-4">
+                    <p class="text-secondary">Пока нет опубликованных отзывов.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+{% endblock content %}

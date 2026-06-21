@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Контакты - BuzzBee{% endblock %}
+
+{% block extra_css %}
+<style>
+    .contacts-hero {
+        padding-top: 150px;
+        padding-bottom: 50px;
+        background-color: #111;
+        border-bottom: 3px solid #ffc107;
+    }
+    .contacts-hero h1 {
+        font-size: 3.5rem;
+        font-weight: 900;
+        text-transform: uppercase;
+    }
+    .map-container {
+        height: 700px;
+        width: 100%;
+        border: 2px solid #ffc107;
+        border-radius: 10px;
+        overflow: hidden;
+        margin-top: 50px;
+    }
+    .map-container iframe {
+        border: none !important;
+    }
+    .contact-info-block {
+        background-color: #1a1a1a;
+        padding: 30px;
+        border-radius: 10px;
+        border-left: 5px solid #ffc107;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        height: 100%;
+        transition: background-color 0.3s;
+    }
+    .contact-info-block:hover {
+        background-color: #222;
+    }
+    .contact-icon {
+        font-size: 2.5rem;
+        margin-bottom: 15px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<section class="site-section contacts-hero">
+    <div class="container" data-aos="fade-down">
+        <h1 class="text-warning text-center">Свяжитесь с нами</h1>
+        <p class="text-center lead text-secondary mx-auto" style="max-width: 800px;">
+            Мы всегда на связи и готовы ответить на ваши вопросы. Ждем вас в нашей студии!
+        </p>
+    </div>
+</section>
+
+<section class="site-section section-dark">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10 mb-5" data-aos="fade-up">
+                <h2 class="text-white text-center mb-4">Наши контактные данные</h2>
+                <div class="row">
+                    <div class="col-md-4 mb-4">
+                        <div class="contact-info-block text-white">
+                            <i class="fas fa-phone-alt text-warning contact-icon"></i>
+                            <h4 class="fw-bold">Позвоните нам</h4>
+                            <p class="fs-4 fw-bold mb-0">+7 (912) 622 28 08</p>
+                            <p class="text-secondary small">Пн-Сб: 10:00 – 20:00 (ВС: по записи)</p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 mb-4">
+                        <div class="contact-info-block text-white">
+                            <i class="fas fa-envelope text-warning contact-icon"></i>
+                            <h4 class="fw-bold">Электронная почта</h4>
+                            <p class="fs-5 mb-0">info@buzzbee.ru</p>
+                            <p class="text-secondary small">Отвечаем в течение 1 часа в рабочее время.</p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 mb-4">
+                        <div class="contact-info-block text-white">
+                            <i class="fas fa-map-marker-alt text-warning contact-icon"></i>
+                            <h4 class="fw-bold">Наш адрес</h4>
+                            <p class="fs-5 mb-0">г. Екатеринбург, ул. Волгоградская, д. 112</p>
+                            <p class="text-secondary small">Для заезда на территорию предварительно позвоните.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="site-section section-light pt-0 pb-5">
+    <div class="container" data-aos="fade-up">
+        <h2 class="text-white mt-5">Наше расположение</h2>
+
+        <div class="map-container">
+            <script type="text/javascript" charset="utf-8" async
+                src="https://api-maps.yandex.ru/services/constructor/1.0/js/?um=constructor%3A5b99c14a58ab3e70632950a2f9bd3fd3c311674d5e569d7f53239f72c196879e&amp;lang=ru_RU&amp;scroll=true">
+            </script>
+        </div>
+
+        <div class="text-center mt-4">
+            <p class="text-warning fw-bold">Мы находимся по адресу: г. Екатеринбург, ул. Волгоградская, д. 112</p>
+        </div>
+    </div>
+</section>
+
+{% endblock content %}

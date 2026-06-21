@@ -1,0 +1,337 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Главная - BuzzBee{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* ========================================================= */
+    /* СТИЛИ HERO СЕКЦИИ */
+    /* ========================================================= */
+    .hero-section {
+        /* Высота: 100vh минус высота шапки ~97px. */
+        height: calc(100vh - 97px);
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+
+        /* ФОНОВОЕ ИЗОБРАЖЕНИЕ */
+        background-image: url("{% static 'img/hero_bg.jpg' %}");
+        background-position: center center;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+
+    /* ОВЕРЛЕЙ */
+    .hero-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background-color: rgba(0, 0, 0, 0.7);
+        z-index: 1;
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 2;
+    }
+
+    .hero-content h1 {
+        font-size: 3.8rem;
+        font-weight: 900;
+        text-transform: uppercase;
+        margin-bottom: 25px;
+        line-height: 1.2;
+    }
+    .hero-content p {
+        font-size: 1.3rem;
+        margin-bottom: 40px;
+        color: #ffc107;
+    }
+
+    @media (max-width: 768px) {
+        .hero-section {
+            height: 100vh; /* Полная высота на мобильных */
+        }
+        .hero-content h1 {
+            font-size: 2rem; /* Уменьшаем размер заголовка */
+        }
+        .hero-content p {
+            font-size: 1rem; /* Уменьшаем размер подзаголовка */
+        }
+        .btn-cta-xl {
+            padding: 10px 20px !important;
+            font-size: 1rem !important;
+        }
+    }
+    /* Конец адаптации Hero */
+
+    /* Форма в Hero (удалено, если не используется) */
+    /* ... (Ваши стили формы) ... */
+
+
+    .btn-cta-xl {
+        padding: 15px 40px !important;
+        font-size: 1.2rem !important;
+    }
+
+    /* ========================================================= */
+    /* СТИЛИ КАРТОЧЕК С УСЛУГАМИ (Service Card) */
+    /* ========================================================= */
+    .service-card {
+        transition: transform 0.3s, box-shadow 0.3s;
+        border: 1px solid #333;
+        background-color: #1a1a1a;
+    }
+    .service-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(255, 193, 7, 0.15);
+        border-color: #ffc107;
+    }
+
+    /* Секция преимуществ */
+    .advantage-icon {
+        font-size: 4rem;
+        margin-bottom: 20px;
+        display: inline-block;
+        transition: color 0.3s;
+    }
+    .col-md-4:hover .advantage-icon {
+        color: white !important;
+    }
+
+    /* Стили для превью работ (Видео/Фото) */
+    .work-preview-media {
+        width: 100%;
+        height: 250px;
+        object-fit: cover;
+        border-radius: 8px;
+        transition: transform 0.3s;
+    }
+    .work-preview-placeholder { /* Стиль для заглушки */
+        width: 100%;
+        height: 250px;
+        background-color: #333;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #777;
+        font-size: 0.9rem;
+    }
+
+    /* Стили для превью отзывов */
+    .review-preview-card {
+        background-color: #1a1a1a;
+        padding: 20px;
+        border-radius: 10px;
+        border: 1px solid #333;
+        height: 100%;
+        position: relative;
+    }
+    .review-preview-card:before {
+        content: "\201C"; /* Левая кавычка */
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        font-size: 5rem;
+        color: #333;
+        line-height: 0.5;
+    }
+    .review-stars {
+        color: #ffc107;
+        margin-bottom: 10px;
+    }
+    .review-author {
+        font-weight: bold;
+        color: #fff;
+    }
+    .review-car {
+        font-size: 0.9rem;
+        color: #aaa;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<section class="hero-section">
+    <div class="hero-content container" data-aos="fade-up" data-aos-duration="1500">
+        <h1 class="text-white">ПРЕМИАЛЬНЫЙ ДЕТЕЙЛИНГ ВАШЕГО АВТО В ЕКАТЕРИНБУРГЕ</h1>
+        <p class="text-warning">
+            Профессиональная защита и идеальный вид. Запишитесь на услугу прямо сейчас!
+        </p>
+
+        <a id="yclients_btn" class="btn btn-cta btn-lg btn-cta-xl" href="https://w1059478.yclients.com"> ЗАПИСАТЬСЯ НА УСЛУГУ </a>
+    </div>
+</section>
+
+<section class="site-section section-light" id="about">
+    <div class="container">
+        <h2 data-aos="fade-right" class="text-warning">Почему выбирают BuzzBee?</h2>
+        <div class="row text-center">
+            <div class="col-md-4 mb-4" data-aos="fade-up">
+                <i class="fas fa-certificate text-warning advantage-icon"></i>
+                <h3 class="text-white fw-bold mt-2">Официальная Гарантия</h3>
+                <p>Работаем только с сертифицированными материалами и предоставляем юридическую гарантию на все услуги.</p>
+            </div>
+            <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="200">
+                <i class="fas fa-tools text-warning advantage-icon"></i>
+                <h3 class="text-white fw-bold mt-2">Квалифицированные Мастера</h3>
+                <p>Более 10 лет опыта в детейлинге. Каждый специалист проходит регулярное повышение квалификации.</p>
+            </div>
+            <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="400">
+                <i class="fas fa-search-dollar text-warning advantage-icon"></i>
+                <h3 class="text-white fw-bold mt-2">Прозрачное Ценообразование</h3>
+                <p>Никаких скрытых платежей. Вы получаете точный расчет сразу после диагностики вашего автомобиля.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="site-section section-dark">
+    <div class="container">
+        <h2 data-aos="fade-left">Наши популярные услуги</h2>
+        <p class="text-center mb-5 text-secondary" data-aos="fade-down">Повышаем комфорт и безопасность вашего автомобиля.</p>
+
+        <div class="row">
+
+            <div class="col-md-6 col-lg-3 mb-4" data-aos="zoom-in-up">
+                <div class="service-card p-4 rounded-3 h-100">
+                    <i class="fas fa-lightbulb text-warning float-end fs-1"></i>
+                    <h4 class="text-warning fw-bold mb-3">Установка Bi-LED</h4>
+                    <p class="text-white-50">Кардинальное улучшение головного света. Четкая светотеневая граница и безопасность в любую погоду.</p>
+                    <a href="https://w1059478.yclients.com" class="btn btn-outline-warning mt-3">ЗАПИСАТЬСЯ</a>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3 mb-4" data-aos="zoom-in-up" data-aos-delay="150">
+                <div class="service-card p-4 rounded-3 h-100">
+                    <i class="fab fa-android text-warning float-end fs-1"></i>
+                    <h4 class="text-warning fw-bold mb-3">Android-магнитола</h4>
+                    <p class="text-white-50">Современная мультимедиа, навигация, интернет и камера заднего вида. Полная интеграция в штатное место.</p>
+                    <a href="https://w1059478.yclients.com" class="btn btn-outline-warning mt-3">ЗАПИСАТЬСЯ</a>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3 mb-4" data-aos="zoom-in-up" data-aos-delay="300">
+                <div class="service-card p-4 rounded-3 h-100">
+                    <i class="fas fa-shield-alt text-warning float-end fs-1"></i>
+                    <h4 class="text-warning fw-bold mb-3">Установка StarLine</h4>
+                    <p class="text-white-50">Надежная охранно-телематическая система с дистанционным управлением и автозапуском.</p>
+                    <a href="https://w1059478.yclients.com" class="btn btn-outline-warning mt-3">ЗАПИСАТЬСЯ</a>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3 mb-4" data-aos="zoom-in-up" data-aos-delay="450">
+                <div class="service-card p-4 rounded-3 h-100">
+                    <i class="fas fa-volume-mute text-warning float-end fs-1"></i>
+                    <h4 class="text-warning fw-bold mb-3">Шумоизоляция</h4>
+                    <p class="text-white-50">Устранение посторонних шумов и вибраций, повышение комфорта в салоне, улучшение звучания аудиосистемы.</p>
+                    <a href="https://w1059478.yclients.com" class="btn btn-outline-warning mt-3">ЗАПИСАТЬСЯ</a>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="text-center mt-5">
+            <a href="{% url 'service_list' %}" class="btn btn-lg btn-cta">Полный каталог услуг</a>
+        </div>
+    </div>
+</section>
+
+<section class="site-section section-dark" id="works">
+    <div class="container">
+        <h2 class="text-warning" data-aos="fade-up">Последние выполненные работы</h2>
+        <div class="row">
+
+            {% if last_works %}
+                {% for work in last_works %}
+                    <div class="col-md-6 col-lg-3 mb-4" data-aos="flip-up" data-aos-delay="{{ forloop.counter0|stringformat:'d' }}00">
+                        <a href="{% url 'work_detail' slug=work.slug %}" class="text-decoration-none">
+                            <div class="rounded shadow-lg border border-secondary overflow-hidden">
+
+                                {% with main_video=work.get_main_video_url main_image=work.get_main_image_url %}
+                                    {% if main_video %}
+                                        <video class="work-preview-media" autoplay muted loop playsinline>
+                                            <source src="{{ main_video }}" type="video/mp4">
+                                            Ваш браузер не поддерживает видео.
+                                        </video>
+                                    {% elif main_image %}
+                                        <img src="{{ main_image }}" alt="{{ work.title }}" class="work-preview-media">
+                                    {% else %}
+                                        <div class="work-preview-placeholder">Нет медиафайла</div>
+                                    {% endif %}
+                                {% endwith %}
+
+                                <div class="p-3 text-center">
+                                    <h5 class="text-white mb-1">{{ work.title }}</h5>
+                                    <p class="small text-warning">{{ work.description|truncatechars:50 }}</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="col-12 text-center py-4">
+                    <p class="text-secondary">Работы скоро появятся здесь.</p>
+                </div>
+            {% endif %}
+
+        </div>
+        <div class="text-center mt-4">
+            <a href="{% url 'works' %}" class="btn btn-outline-warning btn-lg">Смотреть всю галерею работ</a>
+        </div>
+    </div>
+</section>
+
+<section class="site-section section-light">
+    <div class="container">
+        <h2 class="text-white" data-aos="fade-down">Что о нас говорят?</h2>
+        <p class="text-center mb-5 text-secondary" data-aos="fade-down" data-aos-delay="100">
+            Мы гордимся доверием наших клиентов.
+        </p>
+
+        <div class="row justify-content-center">
+
+            {% if last_reviews %}
+                {% for review in last_reviews %}
+                    <div class="col-lg-4 mb-4" data-aos="zoom-in-up" data-aos-delay="{{ forloop.counter0|stringformat:'d' }}00">
+                        <div class="review-preview-card">
+                            <div class="review-stars">
+                                {% for i in "12345"|make_list %}
+                                    {% if forloop.counter <= review.rating %}
+                                        <i class="fas fa-star"></i>
+                                    {% else %}
+                                        <i class="far fa-star text-secondary"></i>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            <p class="text-white">{{ review.text|truncatechars:120 }}</p>
+                            <div class="review-author mt-3">{{ review.author_name }}</div>
+                            <div class="review-car">Авто: {{ review.car_model }}</div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="col-12 text-center py-4">
+                    <p class="text-secondary">Отзывы скоро появятся здесь.</p>
+                </div>
+            {% endif %}
+
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="{% url 'reviews' %}" class="btn btn-outline-warning btn-lg">Посмотреть все отзывы</a>
+        </div>
+    </div>
+</section>
+{% endblock content %}
